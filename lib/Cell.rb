@@ -16,4 +16,22 @@ class Cell
     @features_sensors = feat_sense
     @platform_os = plat_os
   end
+
+  def to_s
+    string = []
+    string << "OEM: #{@oem}"
+    string << "Model: #{@model}"
+    string << "Launch Announced: #{@launch_ann}"
+    string << "Launch Status: #{@launch_status}"
+    string << "Body Dimensions: #{@body_dimensions}"
+    string << "Body Weight (g): #{@body_weight}"
+    string << "Body Sim: #{@body_sim}"
+    string << "Display Type: #{@display_type}"
+    string << "Display Size (in): #{@display_size}"
+    string << "Display Resolution: #{@display_res}"
+    string << "Features Sensors: #{@features_sensors}"
+    string << "Platform OS: #{@platform_os}"
+
+    string.join("\n")
+  end
 end

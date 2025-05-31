@@ -1,5 +1,7 @@
 require 'csv'
 require_relative 'Util'
+require_relative 'CellGroup'
+require_relative 'Cell'
 
 class Ingestor
   include Util
@@ -40,6 +42,10 @@ class Ingestor
     @data = CSV.read(@file, headers:true)
   end
 
+  def create_CellGroup()
+    output_path = File.expand_path('new_csv.csv', __dir__)
+    return CellGroup.new(output_path)
+  end
 
   def clean_all()
     @data.each do |row|
@@ -153,7 +159,6 @@ class Ingestor
   def clean_platform_os()
     os = @row['platform_os']
     if os.nil? || float?(os)
-      puts os
       @row['platform_os'] = nil
     else
       os_idx = os.index(',')
