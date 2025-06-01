@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'csv'
-require 'set'
 require_relative 'util'
 require_relative 'cell'
 

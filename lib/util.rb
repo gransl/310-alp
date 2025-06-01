@@ -12,7 +12,7 @@ module Util
   # find the mean of an arr , must be int or float
   def self.mean(arr)
     sum = 0
-    arr&.compact&.each do |num|
+    arr.each do |num|
       sum += num
     end
     sum / arr.size.to_f
