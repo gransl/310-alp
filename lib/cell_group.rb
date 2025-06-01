@@ -6,7 +6,8 @@ require_relative 'cell'
 
 # Groups Cells to perform aggregate calculations and analysis.
 class CellGroup
-  attr_reader(:body_weight_arr, :display_size_arr)
+  attr_reader :body_weight_arr, :display_size_arr
+
   def initialize(file)
     @data = CSV.read(file, headers: true)
     @group = []
@@ -36,10 +37,38 @@ class CellGroup
   end
 
   # returns average body weight
-  def avg_body_weight
-    ans = Util.mean(@body_weight_arr.compact)
+  def avg_body_weight(num_arr = @body_weight_arr)
+    ans = Util.mean(num_arr)
     # By default, Ruby returns the last operation!
     ans.round(2)
+  end
+
+  # returns average body weight by company (oem)
+  def avg_body_weight_by_company(oem)
+    phones_bw = []
+
+    @group.each do |row|
+      phones_bw << row.body_weight if row.oem.downcase == oem.downcase && row.body_weight
+    end
+    avg_body_weight(phones_bw)
+  end
+
+  # Question 1: returns company with the largest average body weight
+  # @return [Array] company name, max average body weight
+  def max_avg_body_weight_by_company
+    brands = brand_list
+    max_avg_wt = 0
+    brand_max = ''
+
+    brands.each do |brand|
+      temp_wt = avg_body_weight_by_company(brand)
+      if temp_wt > max_avg_wt
+        max_avg_wt = temp_wt
+        brand_max = brand
+      end
+    end
+
+    [brand_max, max_avg_wt]
   end
 
   # returns body weight standard deviation
@@ -69,6 +98,46 @@ class CellGroup
     phones
   end
 
+  # Returns a list of phones released in a year different from their announcement.
+  def announce_yr_different_than_release_yr
+    phones = []
+
+    @group.each do |cell|
+      if cell.launch_status&.include?('Available')
+        launch_year = cell.launch_status.to_s.strip[/\b(\d{4})\b/, 1].to_i
+        phones << [cell.oem, cell.model].join(' ') unless cell.launch_announced == launch_year
+      end
+    end
+
+    phones
+  end
+
+  # returns a list of the count of phones launched in every year since 1999
+  def phone_count_per_year
+    year_count = Hash.new(0)
+
+    @group.each do |cell|
+      next unless cell.launch_status&.include?('Available')
+
+      launch_year = cell.launch_status.to_s.strip[/\b(\d{4})\b/, 1]
+      key = launch_year.to_sym
+      year_count[key] += 1
+    end
+
+    year_count
+  end
+
+  # Returns a list of all brands (oem) in the cell group
+  def brand_list
+    brand_list = []
+
+    @group.each do |cell|
+      brand_list << cell.oem unless brand_list.include?(cell.oem)
+    end
+
+    brand_list
+  end
+
   # Returns a count of number of phones for each brand
   def brand_count
     # Check this out: this 0 means that if the key isn't in the hash yet,
@@ -86,6 +155,19 @@ class CellGroup
     end
 
     string.join("\n")
+  end
+
+  # TODO: change if V1 isn't a feature
+  # Returns a list of phones that only have one feature sensor
+  def one_feature_phone_count
+    one_feature_phone_count = 0
+
+    @group.each do |cell|
+      features_arr = cell.features_sensors&.split(' ')
+      one_feature_phone_count += 1 if features_arr&.size == 1
+    end
+
+    one_feature_phone_count
   end
 
   # Returns a range of values from the CellGroup

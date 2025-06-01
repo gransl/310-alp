@@ -2,5 +2,5 @@ oem,model,launch_announced,launch_status,body_dimensions,body_weight,body_sim,di
 NimbusTech,Nimbus X1,2024,Available. Released 2020,160 x 75 x 8 mm,,,AMOLED,6.5,2400 x 1080 pixels,"Fingerprint (under display), Accelerometer, Gyroscope, Proximity",NimbusOS 3
 SkyWave,Stratus 9,2023,,158 x 72 x 7.5 mm,175.0,Single SIM (Nano-SIM),LCD,6.1,2280 x 1080 pixels,"Face recognition, Accelerometer, Proximity",SkyOS 2.5
 NimbusTech,,,Cancelled,162 x 76 x 7.9 mm,185.0,Dual SIM (Nano-SIM),OLED,6.7,,,NimbusOS 4.0
-Vertex,Alpha Z,2024,Available. Released 2020,165 x 78 x 8.2 mm,190.0,Dual SIM (Nano-SIM),AMOLED,,3200 x 1440 pixels,"Fingerprint, Accelerometer, Gyroscope, Barometer",VertexOS 1.0
+Vertex,Alpha Z,2024,Available. Released 2020,165 x 78 x 8.2 mm,190.0,Dual SIM (Nano-SIM),AMOLED,,3200 x 1440 pixels,Barometer,VertexOS 1.0
 Zentauri,Nova Z5,2023,Discontinued, 153 x 72 x 7.6 mm (6.02 x 2.83 x 0.30 in),168.0,,OLED,6.4,2400 x 1080 pixels,V1,

@@ -23,7 +23,6 @@ class IngestorTest < Minitest::Test
   end
 
   def test_remove_duplicates
-    print(@test_cg)
     assert_equal(5, @test_cg.size)
   end
 

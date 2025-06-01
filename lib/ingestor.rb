@@ -24,14 +24,8 @@ class Ingestor
   end
 
   def ingest
-    # lines = File.foreach(@file).count
-    # puts "Before ingest line count: #{lines}"
-
     remove_duplicates
     clean_all
-
-    # new_csv_lines = File.foreach('lib/new_csv.csv').count
-    # puts "After ingest line count: #{new_csv_lines}"
   end
 
   def remove_duplicates
