@@ -50,7 +50,7 @@ class Cell
       "Display Type: #{@display_type}",
       "Display Size (in): #{@display_size}",
       "Display Resolution: #{@display_resolution}",
-      "Features Sensors: #{@features_sensors.join(', ')}",
+      "Features Sensors: #{@features_sensors}",
       "Platform OS: #{@platform_os}"
     ].join("\n")
   end

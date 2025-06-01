@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 require 'csv'
-require_relative 'Util'
-require_relative 'CellGroup'
-require_relative 'Cell'
+require_relative 'util'
+require_relative 'cell_group'
+require_relative 'cell'
 
 # Ingests and cleans CSV data.
 #
@@ -15,6 +15,9 @@ class Ingestor
   include Util
 
   def initialize(file)
+    raise ArgumentError, 'File does not exist' unless File.exist?(file)
+    raise ArgumentError, 'File is empty' if File.zero?(file)
+
     @file = file
     @data = CSV.read(@file, headers: true)
     @row = nil
@@ -81,12 +84,12 @@ class Ingestor
 
   def clean_oem
     oem = @row['oem']
-    @row['oem'] = oem.empty? || oem == '-' ? nil : oem
+    @row['oem'] = oem&.empty? || oem == '-' ? nil : oem
   end
 
   def clean_model
     model = @row['model']
-    @row['model'] = model.empty? || model == '-' ? nil : model
+    @row['model'] = model&.empty? || model == '-' ? nil : model
   end
 
   def clean_launch_ann
@@ -99,19 +102,14 @@ class Ingestor
     valid_status = %w[Cancelled Discontinued]
     launch_status = @row['launch_status']
 
-    if valid_status.include?(launch_status)
-      nil
-    elsif launch_status.include?('Available')
-      year_str = launch_status.to_s.strip[/\b(\d{4})\b/, 1]
-      @row['launch_status'] = "Available. Released #{year_str}"
-    else
-      @row['launch_status'] = nil
-    end
+    return unless !valid_status.include?(launch_status) && !launch_status&.match?(/Available\. Released \d{4}/)
+
+    @row['launch_status'] = nil
   end
 
   def clean_body_dim
     body_dim = @row['body_dimensions']
-    @row['body_dimensions'] = body_dim.empty? || body_dim == '-' ? nil : body_dim
+    @row['body_dimensions'] = body_dim&.empty? || body_dim == '-' ? nil : body_dim
   end
 
   def clean_body_wt
@@ -119,9 +117,12 @@ class Ingestor
     if wt_str.nil? || wt_str.empty? || wt_str == '-'
       @row['body_weight'] = nil
     else
-      g_idx = wt_str.index('g')
-      g_idx ||= wt_str.index('(')
-      @row['body_weight'] = wt_str[0, g_idx].strip.to_f
+      idx = wt_str.index('g') || wt_str.index('(')
+      @row['body_weight'] = if idx.nil?
+                              nil
+                            else
+                              wt_str[0, idx].strip.to_f
+                            end
     end
   end
 
@@ -136,17 +137,18 @@ class Ingestor
 
   def clean_display_type
     display = @row['display_type']
-    @row['display_type'] = display.empty? || display == '-' ? nil : display
+    @row['display_type'] = display&.empty? || display == '-' ? nil : display
   end
 
   def clean_display_size
     display_size = @row['display_size']
     if display_size.nil? || display_size.empty? || display_size == '-'
       @row['display_size'] = nil
-    else
-      i_idx = display_size.index('i')
-      @row['display_size'] = display_size[0, i_idx].strip.to_f
+      return
     end
+
+    match = display_size.match(/\d+(\.\d+)?/)
+    @row['display_size'] = match ? match[0].to_f : nil
   end
 
   def clean_display_resolution
@@ -156,15 +158,14 @@ class Ingestor
 
   def clean_features_sensors
     fs = @row['features_sensors']
-    return unless float?(fs) || fs.nil? || fs.empty?
+    return unless Util.float?(fs) || fs.nil? || fs.empty?
 
     @row['features_sensors'] = nil
   end
 
-  # @return [null, nil]
   def clean_platform_os
     os = @row['platform_os']
-    if os.nil? || float?(os)
+    if os.nil? || Util.float?(os)
       @row['platform_os'] = nil
     else
       os_idx = os.index(',')

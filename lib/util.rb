@@ -5,14 +5,14 @@ module Util
   def self.float?(val)
     Float(val)
     true
-  rescue ArgumentError
+  rescue ArgumentError, TypeError
     false
   end
 
   # find the mean of an arr , must be int or float
   def self.mean(arr)
     sum = 0
-    arr.each do |num|
+    arr&.compact&.each do |num|
       sum += num
     end
     sum / arr.size.to_f

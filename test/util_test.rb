@@ -13,9 +13,7 @@ class TestUtil < Minitest::Test
     assert Util.float?(is_float)
     assert Util.float?(is_float2)
     refute Util.float?(is_not_float)
-    assert_raises(TypeError) do
-      Util.float?(nil)
-    end
+    refute Util.float?(nil)
   end
 
   def test_mean
