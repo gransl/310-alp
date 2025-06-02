@@ -8,13 +8,15 @@ Ruby 3.4.4
 
 ## 💡 Why Ruby?
 Team Magma wrote their wikis on Ruby, and it sparked an interest in the
-language. I was curious about its "There's more than one way to do it" (TMTOWTDI) and "Everything is an object" philosophies. I also don't have alot of experience with scripting language in general, so I wanted to try one. 
+language. I was curious about its "There's more than one way to do it"
+(TMTOWTDI) and "Everything is an object" philosophies. I also don't have a lot
+of experience with scripting language in general, so I wanted to try one. 
 
 ## 🧬  How does Ruby handle...
 
 Because a core Ruby philosophy is TMTOWDI, there are many routes to handling
 things in Ruby. If you browse my code, you'll see I did not adapt one specific
-style, but rather tried differnt things in different circumstances. I also
+style, but rather tried different things in different circumstances. I also
 experimented with my IDE's (RubyMine) suggestions for making code more compact,
 which taught me new operators and formats that I hadn't seen before!
 
@@ -28,7 +30,7 @@ control. Ruby has two main types of objects, classes and [modules](#abstraction)
 
 Classes are Ruby's blueprint to make several instances of an object with the
 same attributes and fields. Ruby has streamlined tools to make setting up
-classes quicky and easy. Below is an example of a class with all of its setter
+classes quickly and easy. Below is an example of a class with all of its setter
 and getters already made.
 
 ```ruby
@@ -50,7 +52,7 @@ end
 
 Fields marked with `attr_reader` have a getter, and those marked with
 `attr_accessor` have a getter and a setter. (`attr_writer` is a way to get only
-a setter). Fields are created with the `@` symbol inside the constructor. All
+a setter). Fields are created using the `@` symbol inside the constructor. All
 fields *always* private, and can only be accessed via the accessor methods. 
 
 Classes are *always* public for the namespace it's defined in. This means
@@ -60,7 +62,7 @@ can offer classes that are private to the class they are defined in.
 Methods can be marked as public, private, or protected. (Protected methods in
 Ruby are methods are can be called by other instances or subclasses, but can
 only use that method internally. Protected methods could not be called outside
-of the class.) Methods are are given an access control marker using this syntax:
+of the class.) Methods are given an access control marker using this syntax:
 
 ``` ruby
 
@@ -89,7 +91,7 @@ end
 Ruby uses single inheritance model, via this syntax:
 
 ```ruby
-class Animal < Dog
+class Dog < Animal
     def speak
         super + ' and barks!'
     end
@@ -108,7 +110,7 @@ enables dynamic behavior at run time.
 **Polymorphism is the OOP attribute where Ruby shines the most**. Many language
 support polymorphism via inheritance or interfaces, in Ruby this is not a
 requirement. Ruby achieves this through duck typing, which essentially means if
-a method can repond to it, it works. It doesn't concern itself with types.
+a method can respond to it, it works. It doesn't concern itself with types.
 
 To understand this let's consider an example in Java. 
 
@@ -130,21 +132,23 @@ In Ruby, if an object has that method, it can invoke it!
 ### Anything with a write method will work as the actual parameter for object!
 def log(msg, object) 
     object.write(msg)
+end
 ```
 #### Abstraction
 
 The abstraction principle is about simplifying complex system, exposing on the
 necessary information and hiding internal implementation. In languages like Java
 this can be done via interfaces, but Ruby does not have these. It can provide
-absraction through modules, which allow a programmer to group alike methods and
+abstraction through modules, which allow a programmer to group alike methods and
 properties in an object. Different from classes, modules cannot be instantiated.
 
+Let's assume a and b are vector objects with fields `x` and `y`:
 ```ruby
 module VectorUtil
     # adds two vectors
     def add(a,b)
         return [a.x + b.x, a.y + b.y]
-
+    end
 end 
 ```
 For example, you might want to create a utility class to create operations on
@@ -186,7 +190,7 @@ elsif condition_2
     # code if condition_2 true
 else
     # code if none true
-else
+end
 ```
 
 It also has the rare `unless` keyword, which is a conditional that triggers on false.
@@ -240,7 +244,7 @@ count += 1
 ```
 
 ```ruby
-# 3. Mutiple assignment. Getting more interesting...
+# 3. Multiple assignment. Getting more interesting...
 a, b = 5, 12
 
 # Great for swapping!
@@ -281,7 +285,7 @@ x += 1
 ...
 end
 
-# 0..5 means between 0 (inclusvie) and 5 (exclusive) stepping by 1
+# 0..5 means between 0 (inclusive) and 5 (exclusive) stepping by 1
 for i in 0..5
 ...
 end
@@ -327,7 +331,7 @@ value). There are many examples of this in my program!
 
 ``` ruby
 def square(x)
-    x * x # implicity returned
+    x * x # implicitly returned
 end
 
 puts square(3) # prints 3
@@ -358,14 +362,14 @@ require 'minitest/autorun'
 class TestUtil < Minitest::Test
 
   def test_float?
-  ...
+    ...
   end
 
 end
 ```
 `minitest` supports lots of testing options, many of which I used, like:
 ```ruby
-assert(condition)
+assert(condition) # valid if condition is true
 
 refute(condition) # valid if condition is false
 
@@ -421,7 +425,16 @@ read `cells.csv` then write to a new csv the cleansed data.
 ### Math
 
 The Math library is a core library that comes installed with Ruby. I used this
-to calculate a square root for my sample standard deviation in my own utility library.
+to calculate a square root for my sample standard deviation in my own utility
+library.
+
+```ruby
+def self.standard_deviation(arr)
+    mean = mean(arr)
+    variance = arr.map { |x| (x - mean)**2 }.sum / (arr.size - 1)
+    Math.sqrt(variance)
+end
+```
 
 ### Util (I wrote my own!)
 
@@ -432,16 +445,52 @@ performed some needed calculations:
       `features_sensors` and `platform_os` data, as these categories were to
       reject data that was only a number. 
 - `mean`
-    - To calculate the the (arithmetic) mean of an array of numbers. Useful for
+    - To calculate the (arithmetic) mean of an array of numbers. Useful for
       creating aggregate data for `body_size` and `display_size` data.
 - `standard_deviation`
     - To calculate the standard deviation of an array of numbers. Useful for the
       same reasons as mean. 
 
-## Answer the following questions (and provide a corresponding screen showing output answering them):
+## ❓ Report Questions
 
-    - What company (oem) has the highest average weight of the phone body?
+### 1. What company (oem) has the highest average weight of the phone body?
 
-    - Was there any phones that were announced in one year and released in another? What are they? Give me the oem and models.
-    - How many phones have only one feature sensor?
-    - What year had the most phones launched in any year later than 1999? 
+**Answer**: HP with an avg body weight of 453.6. (They only had one phone, so
+it's kind of an outlier).
+
+[![Q1](img/1-1.png)]
+
+[![Q1](img/1-2.png)]
+
+[![Q1](img/1-3.png)]
+
+
+### 2. Was there any phones that were announced in one year and released in another? What are they? Give me the oem and models.
+
+**Answer**: Yes, 3. Motorola One Hyper, Motorola Razr 2019, Xiaomi Redmi K30 5G
+
+[![Q2](img/2-1.png)]
+
+[![Q2](img/2-2.png)]
+
+[![Q2](img/2-3.png)]
+
+### 3. How many phones have only one feature sensor?
+
+**Answer**: 419, if we include V1 as a feature
+
+[![Q3](img/3-1.png)]
+
+[![Q3](img/3-2.png)]
+
+[![Q3](img/3-3.png)]
+
+### 4. What year had the most phones launched in any year later than 1999? 
+
+**Answer**: 2019 (246 phones)
+
+[![Q4](img/4-1.png)]
+
+[![Q4](img/4-2.png)]
+
+[![Q4](img/4-3.png)]

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Class of calculations for Cell and CellGroup
 module Util
   # checks if a number is a float

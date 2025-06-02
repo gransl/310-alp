@@ -4,11 +4,10 @@ require 'minitest/autorun'
 require_relative '../lib/util'
 
 class TestUtil < Minitest::Test
-
   def test_float?
     is_float = 3.2
     is_float2 = 4
-    is_not_float = "oh hello!"
+    is_not_float = 'oh hello!'
 
     assert Util.float?(is_float)
     assert Util.float?(is_float2)

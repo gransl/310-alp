@@ -6,8 +6,8 @@
 # @see CellGroup
 class Cell
   # Getters (no Setters, shouldn't be possible to change these values)
-  attr_reader :oem, :model, :launch_announced, :launch_status,  :body_dimensions, :body_weight,
-         :body_sim, :display_type, :display_size, :display_resolution, :features_sensors,
+  attr_reader :oem, :model, :launch_announced, :launch_status, :body_dimensions, :body_weight,
+              :body_sim, :display_type, :display_size, :display_resolution, :features_sensors,
               :platform_os
 
   # @param [Object] oem Original Manufacturer
@@ -38,6 +38,9 @@ class Cell
     @platform_os = plat_os
   end
 
+  # Returns Cell info as a formated string
+  #
+  # @return [String]
   def to_s
     [
       "OEM: #{@oem}",
@@ -54,5 +57,4 @@ class Cell
       "Platform OS: #{@platform_os}"
     ].join("\n")
   end
-
 end

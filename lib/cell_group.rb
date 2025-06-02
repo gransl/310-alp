@@ -5,6 +5,7 @@ require_relative 'util'
 require_relative 'cell'
 
 # Groups Cells to perform aggregate calculations and analysis.
+# noinspection ALL
 class CellGroup
   attr_reader :body_weight_arr, :display_size_arr
 
@@ -19,17 +20,9 @@ class CellGroup
     @group.each(&method(:populate_field_arr))
   end
 
-  def populate_group
-    @data.each do |r|
-      temp = Cell.new(r['oem'], r['model'], r['launch_announced']&.to_i, r['launch_status'],
-                      r['body_dimensions'], r['body_weight']&.to_f, r['body_sim'],
-                      r['display_type'],
-                      r['display_size']&.to_f, r['display_resolution'], r['features_sensors'],
-                      r['platform_os'])
-      @group << temp
-    end
-  end
-
+  # Returns cell at given index
+  #
+  # @param index of cell number to return
   def return_cell(num)
     raise ArgumentError unless num >= 0 && num < @group.size
 
@@ -37,6 +30,7 @@ class CellGroup
   end
 
   # returns average body weight
+  # @return [Float] overall average body weight
   def avg_body_weight(num_arr = @body_weight_arr)
     ans = Util.mean(num_arr)
     # By default, Ruby returns the last operation!
@@ -44,6 +38,7 @@ class CellGroup
   end
 
   # returns average body weight by company (oem)
+  # @return [Float] average body weight by company
   def avg_body_weight_by_company(oem)
     phones_bw = []
 
@@ -53,7 +48,7 @@ class CellGroup
     avg_body_weight(phones_bw)
   end
 
-  # Question 1: returns company with the largest average body weight
+  # Returns company with the largest average body weight
   # @return [Array] company name, max average body weight
   def max_avg_body_weight_by_company
     brands = brand_list
@@ -71,24 +66,30 @@ class CellGroup
     [brand_max, max_avg_wt]
   end
 
-  # returns body weight standard deviation
+  # Returns body weight standard deviation
+  # @return [Float] body weight standard deviation
   def sd_body_weight
     ans = Util.standard_deviation(@body_weight_arr.compact)
     ans.round(2)
   end
 
   # Returns the average display size
+  # @return [Float] overall average display size
   def avg_display_size
     ans = Util.mean(@display_size_arr.compact)
     ans.round(2)
   end
 
+  # Returns display size standard deviation
+  # @return [Float] overall display size standard deviation
   def sd_display_size
     ans = Util.standard_deviation(@display_size_arr.compact)
     ans.round(2)
   end
 
   # Returns oem and model of all phones announced in given year
+  # @param [Integer] year of interest
+  # @return [Array] cell phone
   def phones_announced_in_year(year)
     phones = []
     @group.each do |cell|
@@ -99,6 +100,7 @@ class CellGroup
   end
 
   # Returns a list of phones released in a year different from their announcement.
+  # @return [Array] list of cell phones with above critereon
   def announce_yr_different_than_release_yr
     phones = []
 
@@ -113,6 +115,7 @@ class CellGroup
   end
 
   # returns a list of the count of phones launched in every year since 1999
+  # @return [Array] list of cell phones with above criteron
   def phone_count_per_year
     year_count = Hash.new(0)
 
@@ -128,6 +131,7 @@ class CellGroup
   end
 
   # Returns a list of all brands (oem) in the cell group
+  # @return [Array] list of all brands in CellGroup
   def brand_list
     brand_list = []
 
@@ -139,6 +143,7 @@ class CellGroup
   end
 
   # Returns a count of number of phones for each brand
+  # @return [String] count of number of cell phones for each brand
   def brand_count
     # Check this out: this 0 means that if the key isn't in the hash yet,
     # it will return 0 instead of nil this means...
@@ -157,8 +162,8 @@ class CellGroup
     string.join("\n")
   end
 
-  # TODO: change if V1 isn't a feature
-  # Returns a list of phones that only have one feature sensor
+  # Returns a list of phones that only have one feature sensor (V1 is a feature)
+  # @return [Array] list of cell phones with only one feature
   def one_feature_phone_count
     one_feature_phone_count = 0
 
@@ -171,6 +176,9 @@ class CellGroup
   end
 
   # Returns a range of values from the CellGroup
+  # @param start [Integer] point of interval
+  # @param last [Integer] end point of interval
+  # @return [String] of values in given range from CellGroup
   def return_range(start, stop)
     string = []
     @group[start..stop].each do |cell|
@@ -180,22 +188,37 @@ class CellGroup
   end
 
   # Returns all values from the CellGroup
+  # @return [String] of all values in the CellGroup
   def to_s
     return_range(0, @group.size)
   end
 
   # Returns number of cells in group
-  #
   # @return [Integer] number of cells in group
   def size
     @group.size
   end
 
+  private
+
+  # Helper to populate the field arrays
   def populate_field_arr(cell)
     num = cell.body_weight
     @body_weight_arr << num if !num.nil? && num.positive?
 
     num = cell.display_size
     @display_size_arr << num if !num.nil? && num.positive?
+  end
+
+  # Helper to populate group
+  def populate_group
+    @data.each do |r|
+      temp = Cell.new(r['oem'], r['model'], r['launch_announced']&.to_i, r['launch_status'],
+                      r['body_dimensions'], r['body_weight']&.to_f, r['body_sim'],
+                      r['display_type'],
+                      r['display_size']&.to_f, r['display_resolution'], r['features_sensors'],
+                      r['platform_os'])
+      @group << temp
+    end
   end
 end

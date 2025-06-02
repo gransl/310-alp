@@ -10,23 +10,20 @@ data = Ingestor.new(file)
 data.ingest
 cg = data.create_cell_group
 
-
-
-
 # # Question 1
-puts "Max Average Body Weight by company: "
+puts 'Max Average Body Weight by company: '
 print cg.max_avg_body_weight_by_company
 
 # # Question 2
-puts "List of phones released in a year different from their announcement:"
+puts 'List of phones released in a year different from their announcement:'
 print cg.announce_yr_different_than_release_yr
 
 # # Question 3
-puts "Count of phones with only one feature sensor:"
+puts 'Count of phones with only one feature sensor:'
 print cg.one_feature_phone_count
 
 # # Question 4
-puts "Phone Launch count per year: "
+puts 'Phone Launch count per year: '
 x = cg.phone_count_per_year
 print x
 x.each do |year, count|
