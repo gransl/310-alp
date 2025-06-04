@@ -3,6 +3,8 @@
 # Alternate Language Project - CSB 310
 #### Author: Sandra Gran
 
+(Access usually README info [here](#README)).
+
 ## 🤔 Which programming language and version did you pick?
 Ruby 3.4.4
 
@@ -494,3 +496,17 @@ it's kind of an outlier).
 [![Q4](img/4-2.png)]
 
 [![Q4](img/4-3.png)]
+
+## README
+
+## 🛠 Requirements
+
+- Install Ruby version 3.4.4
+- Clone or download the project folder
+
+- Install RubyMine or another IDE for running `run.rb` or
+- Navigate to the directory and run on the terminal, 
+with command `ruby main.rb`.
+
+- No dependencies were used, all imports are from standard Ruby library.
+
